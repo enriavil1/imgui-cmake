@@ -32,7 +32,7 @@ if(${OPERATING_SYSTEM} STREQUAL "Apple")
     list(APPEND H_FILES "${IMGUI_BACKEND_DIR}/imgui_impl_osx.mm")
 endif()
 
-# Common files
+# Not OS dependend files
 list(APPEND H_FILES "${IMGUI_BACKEND_DIR}/imgui_impl_sdl3.h")
 list(APPEND CXX_FILES "${IMGUI_BACKEND_DIR}/imgui_impl_sdl3.cpp")
 
@@ -49,8 +49,9 @@ set(PROJECT_FILES
   ${FONTS_FILES}
 )
 
-message(STATUS "[${PROJECT_NAME}] Building STATIC library")
+message(STATUS "[${PROJECT_NAME}] Building library")
 add_library(${PROJECT_NAME} STATIC ${PROJECT_FILES})
+target_link_libraries(${PROJECT_NAME} PUBLIC SDL3::SDL3)
 
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/backends")
-target_compile_definitions(imgui PUBLIC IMGUI_IMPL_OPENGL_LOADER_CUSTOM=<SDL_opengl.h>  GL_GLEXT_PROTOTYPES=1)
+
