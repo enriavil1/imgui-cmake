@@ -1,5 +1,12 @@
-Dear ImGui
+Dear ImGui CMake
 =====
+
+---
+## Dear ImGui CMake
+
+This is a Dear ImGui fork that includes a CMake for easy initialization of projects
+
+---
 
 <center><b><i>"Give someone state and they'll have a bug one day, but teach them how to represent state in two separate locations that have to be kept in sync and they'll have bugs for a lifetime."</i></b></center> <a href="https://twitter.com/rygorous/status/1507178315886444544">-ryg</a>
 
@@ -212,7 +219,3 @@ Embeds [ProggyClean.ttf](http://upperbounds.net) font by Tristan Grimmer (MIT li
 
 Inspiration, feedback, and testing for early versions: Casey Muratori, Atman Binstock, Mikko Mononen, Emmanuel Briney, Stefan Kamoda, Anton Mikhailov, Matt Willis. Also thank you to everyone posting feedback, questions and patches on GitHub.
 
-License
--------
-
-Dear ImGui is licensed under the MIT License, see [LICENSE.txt](https://github.com/ocornut/imgui/blob/master/LICENSE.txt) for more information.
