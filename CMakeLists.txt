@@ -1,57 +1,52 @@
 cmake_minimum_required(VERSION 3.10)
 project(imgui)
 
+# Set the directory for ImGui backends
 set(IMGUI_BACKEND_DIR ${CMAKE_CURRENT_SOURCE_DIR}/backends)
 
-# Specifying files for better cache
-set(H_FILES
-  ${CMAKE_CURRENT_SOURCE_DIR}/imgui.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/imconfig.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/imgui_internal.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/imstb_rectpack.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/imstb_textedit.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/imstb_truetype.h
-)
+# List header and source files explicitly
+set(IMGUI_HEADERS imgui.h imconfig.h imgui_internal.h imstb_rectpack.h
+                  imstb_textedit.h imstb_truetype.h)
 
-set(CXX_FILES
-  ${CMAKE_CURRENT_SOURCE_DIR}/imgui.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/imgui_draw.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/imgui_widgets.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/imgui_demo.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/imgui_tables.cpp
-)
+set(IMGUI_SOURCES imgui.cpp imgui_draw.cpp imgui_widgets.cpp imgui_demo.cpp
+                  imgui_tables.cpp)
 
-# This is not so bueno for cache but its small
+# Font files
 file(GLOB FONTS_FILES ${IMGUI_SOURCE_DIR}/misc/fonts/*.ttf)
 
-set(IMGUI_INTERFACE_LIBS "")
-
+# Platform-specific files (e.g., OS X, SDL3, SDLRenderer3, OpenGL3)
 if(${OPERATING_SYSTEM} STREQUAL "Apple")
-    message(STATUS "[${PROJECT_NAME}] Found apple operating system adding apple specific files")
-    list(APPEND H_FILES "${IMGUI_BACKEND_DIR}/imgui_impl_osx.h")
-    list(APPEND H_FILES "${IMGUI_BACKEND_DIR}/imgui_impl_osx.mm")
+  list(APPEND IMGUI_HEADERS ${IMGUI_BACKEND_DIR}/imgui_impl_osx.h)
+
+  list(APPEND IMGUI_SOURCES ${IMGUI_BACKEND_DIR}/imgui_impl_osx.mm)
 endif()
 
-# Not OS dependend files
-list(APPEND H_FILES "${IMGUI_BACKEND_DIR}/imgui_impl_sdl3.h")
-list(APPEND CXX_FILES "${IMGUI_BACKEND_DIR}/imgui_impl_sdl3.cpp")
+# Common backend files
+list(
+  APPEND
+  IMGUI_HEADERS
+  ${IMGUI_BACKEND_DIR}/imgui_impl_sdl3.h
+  ${IMGUI_BACKEND_DIR}/imgui_impl_sdlrenderer3.h
+  ${IMGUI_BACKEND_DIR}/imgui_impl_opengl3.h
+  ${IMGUI_BACKEND_DIR}/imgui_impl_opengl3_loader.h)
 
-list(APPEND H_FILES "${IMGUI_BACKEND_DIR}/imgui_impl_sdlrenderer3.h")
-list(APPEND CXX_FILES "${IMGUI_BACKEND_DIR}/imgui_impl_sdlrenderer3.cpp")
+list(APPEND IMGUI_SOURCES ${IMGUI_BACKEND_DIR}/imgui_impl_sdl3.cpp
+     ${IMGUI_BACKEND_DIR}/imgui_impl_sdlrenderer3.cpp
+     ${IMGUI_BACKEND_DIR}/imgui_impl_opengl3.cpp)
 
-list(APPEND H_FILES "${IMGUI_BACKEND_DIR}/imgui_impl_opengl3.h")
-list(APPEND H_FILES "${IMGUI_BACKEND_DIR}/imgui_impl_opengl3_loader.h")
-list(APPEND CXX_FILES "${IMGUI_BACKEND_DIR}/imgui_impl_opengl3.cpp")
+# Combine header and source files
+set(PROJECT_FILES ${IMGUI_HEADERS} ${IMGUI_SOURCES} ${FONTS_FILES})
 
-set(PROJECT_FILES
-  ${H_FILES}
-  ${CXX_FILES}
-  ${FONTS_FILES}
-)
-
+# Output build messages
 message(STATUS "[${PROJECT_NAME}] Building library")
+
+# Create the ImGui library target
 add_library(${PROJECT_NAME} STATIC ${PROJECT_FILES})
+
+# Link ImGui library with SDL3
 target_link_libraries(${PROJECT_NAME} PUBLIC SDL3::SDL3)
 
-target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/backends")
-
+# Set include directories for ImGui
+target_include_directories(
+  ${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}"
+                         "${CMAKE_CURRENT_SOURCE_DIR}/backends")
