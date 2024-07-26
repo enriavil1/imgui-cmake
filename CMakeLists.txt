@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 project(imgui)
 
 # Define build options
-option(USE_SDL "Whether to use SDL instead of GFLW" FALSE)
+option(USE_SDL "Whether to use SDL instead of GFLW" OFF)
 
 # Set the directory for ImGui backends
 set(IMGUI_BACKEND_DIR ${CMAKE_CURRENT_SOURCE_DIR}/backends)
