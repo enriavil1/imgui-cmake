@@ -50,8 +50,12 @@ message(STATUS "[${PROJECT_NAME}] Building library")
 # Create the ImGui library target
 add_library(${PROJECT_NAME} STATIC ${PROJECT_FILES})
 
-# Link ImGui library with SDL3
-target_link_libraries(${PROJECT_NAME} PUBLIC SDL3::SDL3)
+if(USE_SDL)
+  # Link ImGui library with SDL3
+  target_link_libraries(${PROJECT_NAME} PUBLIC SDL3::SDL3)
+else()
+  target_link_libraries(${PROJECT_NAME} PUBLIC glfw)
+endif()
 
 # Set include directories for ImGui
 target_include_directories(
