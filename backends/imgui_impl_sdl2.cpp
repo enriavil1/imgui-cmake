@@ -475,12 +475,7 @@ bool ImGui_ImplSDL2_ProcessEvent(const SDL_Event* event)
             bd->WantUpdateGamepadsList = true;
             return true;
         }
-        case SDL_CONTROLLERDEVICEADDED:
-        case SDL_CONTROLLERDEVICEREMOVED:
-        {
-            bd->WantUpdateGamepadsList = true;
-            return true;
-        }
+
     }
     return false;
 }
