@@ -8363,15 +8363,6 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
     return !window->SkipItems;
 }
 
-static void ImGui::SetLastItemDataForWindow(ImGuiWindow* window, const ImRect& rect)
-{
-    ImGuiContext& g = *GImGui;
-    if (window->DockIsActive)
-        SetLastItemData(window->MoveId, g.CurrentItemFlags, window->DockTabItemStatusFlags, window->DockTabItemRect);
-    else
-        SetLastItemData(window->MoveId, g.CurrentItemFlags, IsMouseHoveringRect(rect.Min, rect.Max, false) ? ImGuiItemStatusFlags_HoveredRect : 0, rect);
-}
-
 void ImGui::End()
 {
     ImGuiContext& g = *GImGui;
@@ -20850,53 +20841,6 @@ static bool Platform_OpenInShellFn_DefaultImpl(ImGuiContext*, const char* path)
     path_wbuf.resize(path_wsize);
     ::MultiByteToWideChar(CP_UTF8, 0, path, -1, path_wbuf.Data, path_wsize);
     return (INT_PTR)::ShellExecuteW(NULL, L"open", path_wbuf.Data, NULL, NULL, SW_SHOWDEFAULT) > 32;
-}
-#else
-#include <sys/wait.h>
-#include <unistd.h>
-static bool Platform_OpenInShellFn_DefaultImpl(ImGuiContext*, const char* path)
-{
-#if defined(__APPLE__)
-    const char* args[] { "open", "--", path, NULL };
-#else
-    const char* args[] { "xdg-open", path, NULL };
-#endif
-    pid_t pid = fork();
-    if (pid < 0)
-        return false;
-    if (!pid)
-    {
-        execvp(args[0], const_cast<char **>(args));
-        exit(-1);
-    }
-    else
-    {
-        int status;
-        waitpid(pid, &status, 0);
-        return WEXITSTATUS(status) == 0;
-    }
-}
-#endif
-#else
-static bool Platform_OpenInShellFn_DefaultImpl(ImGuiContext*, const char*) { return false; }
-#endif // Default shell handlers
-
-//-----------------------------------------------------------------------------
-
-#if defined(_WIN32) && defined(IMGUI_DISABLE_WIN32_FUNCTIONS)
-#define IMGUI_DISABLE_DEFAULT_SHELL_FUNCTIONS
-#endif
-#endif
-
-#ifndef IMGUI_DISABLE_DEFAULT_SHELL_FUNCTIONS
-#ifdef _WIN32
-#include <shellapi.h>   // ShellExecuteA()
-#ifdef _MSC_VER
-#pragma comment(lib, "shell32")
-#endif
-static bool Platform_OpenInShellFn_DefaultImpl(ImGuiContext*, const char* path)
-{
-    return (INT_PTR)::ShellExecuteA(NULL, "open", path, NULL, NULL, SW_SHOWDEFAULT) > 32;
 }
 #else
 #include <sys/wait.h>

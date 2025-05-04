@@ -1694,12 +1694,6 @@ struct ImGuiFocusScopeData
     ImGuiID             WindowID;
 };
 
-// Storage for PushFocusScope()
-struct ImGuiFocusScopeData
-{
-    ImGuiID             ID;
-    ImGuiID             WindowID;
-};
 
 //-----------------------------------------------------------------------------
 // [SECTION] Typing-select support
