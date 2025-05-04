@@ -3129,8 +3129,6 @@ static bool ImFontAtlasBuildWithStbTruetype(ImFontAtlas* atlas)
 
         const float inv_rasterization_scale = 1.0f / src.RasterizerDensity;
 
-        const float inv_rasterization_scale = 1.0f / cfg.RasterizerDensity;
-
         for (int glyph_i = 0; glyph_i < src_tmp.GlyphsCount; glyph_i++)
         {
             // Register glyph
