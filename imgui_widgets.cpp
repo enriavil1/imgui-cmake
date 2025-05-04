@@ -4445,18 +4445,18 @@ static bool InputTextFilterCharacter(ImGuiContext* ctx, unsigned int* p_char, Im
 // FIXME: Ideally we should transition toward (1) making InsertChars()/DeleteChars() update undo-stack (2) discourage (and keep reconcile) or obsolete (and remove reconcile) accessing buffer directly.
 static void InputTextReconcileUndoState(ImGuiInputTextState* state, const char* old_buf, int old_length, const char* new_buf, int new_length)
 {
-    const int shorter_length = ImMin(old_length, new_length);
+      const int shorter_length = ImMin(old_length, new_length);
     int first_diff;
     for (first_diff = 0; first_diff < shorter_length; first_diff++)
-        if (old_buf[first_diff] != new_buf_a[first_diff])
+        if (old_buf[first_diff] != new_buf[first_diff])
             break;
-    if (first_diff == old_length && first_diff == new_length_a)
+    if (first_diff == old_length && first_diff == new_length)
         return;
 
     int old_last_diff = old_length   - 1;
     int new_last_diff = new_length - 1;
     for (; old_last_diff >= first_diff && new_last_diff >= first_diff; old_last_diff--, new_last_diff--)
-        if (old_buf[old_last_diff] != new_buf_a[new_last_diff])
+        if (old_buf[old_last_diff] != new_buf[new_last_diff])
             break;
 
     const int insert_len = new_last_diff - first_diff + 1;
