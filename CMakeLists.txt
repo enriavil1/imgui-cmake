@@ -1,19 +1,3 @@
-cmake_minimum_required(VERSION 3.10)
-project(imgui)
-
-# Define build options
-option(USE_SDL "Whether to use SDL instead of GFLW" OFF)
-
-# Set the directory for ImGui backends
-set(IMGUI_BACKEND_DIR ${CMAKE_CURRENT_SOURCE_DIR}/backends)
-
-# List header and source files explicitly
-set(IMGUI_HEADERS imgui.h imconfig.h imgui_internal.h imstb_rectpack.h
-                  imstb_textedit.h imstb_truetype.h)
-
-set(IMGUI_SOURCES imgui.cpp imgui_draw.cpp imgui_widgets.cpp imgui_demo.cpp
-                  imgui_tables.cpp)
-
 # Font files
 file(GLOB FONTS_FILES ${IMGUI_SOURCE_DIR}/misc/fonts/*.ttf)
 
